@@ -1,0 +1,41 @@
+import 'package:departure/provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class CommentsPage extends StatefulWidget {
+  const CommentsPage({super.key});
+
+  @override
+  State<CommentsPage> createState() => _CommentsPageState();
+}
+
+class _CommentsPageState extends State<CommentsPage> {
+  late JsonProvider josnProviderW;
+  late JsonProvider josnProviderR;
+
+  void initState() {
+    context.read<JsonProvider>().getJsonCommentsData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    josnProviderW = context.watch<JsonProvider>();
+    josnProviderR = context.read<JsonProvider>();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Comments'),
+      ),
+      body: ListView.builder(
+        itemCount: josnProviderW.jsonCommentsData.length,
+        itemBuilder: (context, index) => ListTile(
+          leading: Text("${josnProviderW.jsonCommentsData[index].postId}"),
+          title: Text(
+            "${josnProviderW.jsonCommentsData[index].name}",
+          ),
+          subtitle: Text("${josnProviderW.jsonCommentsData[index].email}"),
+        ),
+      ),
+    );
+  }
+}
